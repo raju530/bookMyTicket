@@ -148,7 +148,7 @@ These enums are referenced from multiple services to keep state representation c
 ## 6. Cross-Service Object Flow (LLD View)
 
 ### 6.1 Create Booking (Lock Seats + Price)
-1. Client → `BookingController.createBooking(CreateBookingRequest)`  
+1. Client → `BookingController.createBooking(BookingRequest)`  
 2. `BookingOrchestrator`:
    - Creates `Booking` with `INITIATED`.
    - Calls `InventoryClient.lockSeats(showId, seatIds)`:

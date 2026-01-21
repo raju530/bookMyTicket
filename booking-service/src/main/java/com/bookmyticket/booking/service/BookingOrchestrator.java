@@ -4,8 +4,8 @@ import com.bookmyticket.booking.client.InventoryClient;
 import com.bookmyticket.booking.client.OfferClient;
 import com.bookmyticket.booking.client.PaymentClient;
 import com.bookmyticket.booking.client.TheatreClient;
+import com.bookmyticket.booking.dto.BookingRequest;
 import com.bookmyticket.booking.dto.BookingResponse;
-import com.bookmyticket.booking.dto.CreateBookingRequest;
 import com.bookmyticket.booking.entity.Booking;
 import com.bookmyticket.booking.entity.BookingItem;
 import com.bookmyticket.booking.repo.BookingItemRepository;
@@ -44,7 +44,7 @@ public class BookingOrchestrator {
     }
 
     @Transactional
-    public BookingResponse createBooking(CreateBookingRequest req) {
+    public BookingResponse createBooking(BookingRequest req) {
 
         Booking booking = Booking.builder()
                 .userId(req.userId())

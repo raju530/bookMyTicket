@@ -1,7 +1,7 @@
 package com.bookmyticket.booking.controller;
 
+import com.bookmyticket.booking.dto.BookingRequest;
 import com.bookmyticket.booking.dto.BookingResponse;
-import com.bookmyticket.booking.dto.CreateBookingRequest;
 import com.bookmyticket.booking.service.BookingOrchestrator;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +19,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingResponse create(@RequestBody CreateBookingRequest request) {
+    public BookingResponse create(@RequestBody BookingRequest request) {
         return orchestrator.createBooking(request);
     }
 
