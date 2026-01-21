@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: theatre-service
+          uri: ${THEATRE_SERVICE_BASEURL:http://localhost:8082}
+          predicates:
+            - Path=/theatres/**,/screens/**,/shows/**,/search/**
+        - id: inventory-service
+          uri: ${INVENTORY_SERVICE_BASEURL:http://localhost:8083}
+          predicates:
+            - Path=/inventory/**
+        - id: offer-service
+          uri: ${OFFER_SERVICE_BASEURL:http://localhost:8084}
+          predicates:
+            - Path=/offers/**
+        - id: booking-service
+          uri: ${BOOKING_SERVICE_BASEURL:http://localhost:8085}
+          predicates:
+            - Path=/bookings/**
+        - id: payment-service
+          uri: ${PAYMENT_SERVICE_BASEURL:http://localhost:8086}
+          predicates:
+            - Path=/payments/**

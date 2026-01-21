@@ -1,0 +1,23 @@
+# Maven
+**/target/
+*.log
+
+# IDEs
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven Wrapper (keep scripts if you add them later; ignore heavy JAR)
+.mvn/wrapper/maven-wrapper.jar
+
+# Env files
+.env
+.env.*
+

@@ -1,0 +1,99 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: bmt-postgres
+    environment:
+      POSTGRES_USER: bmt
+      POSTGRES_PASSWORD: bmt
+    ports:
+      - "5432:5432"
+    volumes:
+      - bmt_pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: bmt-redis
+    ports:
+      - "6379:6379"
+
+  theatre-service:
+    build: ./theatre-service
+    container_name: bmt-theatre-service
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/theatre_db
+      SPRING_DATASOURCE_USERNAME: bmt
+      SPRING_DATASOURCE_PASSWORD: bmt
+    ports:
+      - "8082:8082"
+
+  inventory-service:
+    build: ./inventory-service
+    container_name: bmt-inventory-service
+    depends_on:
+      - postgres
+      - redis
+      - theatre-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventory_db
+      SPRING_DATASOURCE_USERNAME: bmt
+      SPRING_DATASOURCE_PASSWORD: bmt
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      THEATRE_SERVICE_BASEURL: http://theatre-service:8082
+    ports:
+      - "8083:8083"
+
+  offer-service:
+    build: ./offer-service
+    container_name: bmt-offer-service
+    ports:
+      - "8084:8084"
+
+  payment-service:
+    build: ./payment-service
+    container_name: bmt-payment-service
+    ports:
+      - "8086:8086"
+
+  booking-service:
+    build: ./booking-service
+    container_name: bmt-booking-service
+    depends_on:
+      - postgres
+      - inventory-service
+      - theatre-service
+      - offer-service
+      - payment-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/booking_db
+      SPRING_DATASOURCE_USERNAME: bmt
+      SPRING_DATASOURCE_PASSWORD: bmt
+      INVENTORY_SERVICE_BASEURL: http://inventory-service:8083
+      THEATRE_SERVICE_BASEURL: http://theatre-service:8082
+      OFFER_SERVICE_BASEURL: http://offer-service:8084
+      PAYMENT_SERVICE_BASEURL: http://payment-service:8086
+    ports:
+      - "8085:8085"
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: bmt-api-gateway
+    depends_on:
+      - theatre-service
+      - inventory-service
+      - offer-service
+      - booking-service
+      - payment-service
+    ports:
+      - "8080:8080"
+    environment:
+      THEATRE_SERVICE_BASEURL: http://theatre-service:8082
+      INVENTORY_SERVICE_BASEURL: http://inventory-service:8083
+      OFFER_SERVICE_BASEURL: http://offer-service:8084
+      BOOKING_SERVICE_BASEURL: http://booking-service:8085
+      PAYMENT_SERVICE_BASEURL: http://payment-service:8086
+
+volumes:
+  bmt_pg_data:

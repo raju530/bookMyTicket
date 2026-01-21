@@ -1,0 +1,23 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: booking-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/booking_db
+    username: bmt
+    password: bmt
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+inventory:
+  base-url: ${INVENTORY_SERVICE_BASEURL:http://localhost:8083}
+theatre:
+  base-url: ${THEATRE_SERVICE_BASEURL:http://localhost:8082}
+offers:
+  base-url: ${OFFER_SERVICE_BASEURL:http://localhost:8084}
+payments:
+  base-url: ${PAYMENT_SERVICE_BASEURL:http://localhost:8086}
