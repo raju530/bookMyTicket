@@ -46,12 +46,13 @@ public class BookingOrchestrator {
     @Transactional
     public BookingResponse createBooking(CreateBookingRequest req) {
 
-        Booking booking = new Booking();
-        booking.setUserId(req.userId());
-        booking.setCity(req.city());
-        booking.setTheatreId(UUID.fromString(req.theatreId()));
-        booking.setShowId(UUID.fromString(req.showId()));
-        booking.setStatus(BookingStatus.INITIATED);
+        Booking booking = Booking.builder()
+                .userId(req.userId())
+                .city(req.city())
+                .theatreId(UUID.fromString(req.theatreId()))
+                .showId(UUID.fromString(req.showId()))
+                .status(BookingStatus.INITIATED)
+                .build();
         booking = bookingRepository.save(booking);
 
         // Save booking seats

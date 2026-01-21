@@ -29,6 +29,24 @@ public class Booking {
     private Instant createdAt = Instant.now();
     private Instant updatedAt = Instant.now();
 
+    public Booking() {
+        // default constructor for JPA
+    }
+
+    private Booking(String userId, UUID showId, UUID theatreId, String city, BookingStatus status) {
+        this.userId = userId;
+        this.showId = showId;
+        this.theatreId = theatreId;
+        this.city = city;
+        this.status = status;
+        this.createdAt = Instant.now();
+        this.updatedAt = this.createdAt;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
 
@@ -61,4 +79,42 @@ public class Booking {
 
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    // Lightweight builder to keep construction expressive while remaining JPA-friendly.
+    public static class Builder {
+        private String userId;
+        private UUID showId;
+        private UUID theatreId;
+        private String city;
+        private BookingStatus status;
+
+        public Builder userId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder showId(UUID showId) {
+            this.showId = showId;
+            return this;
+        }
+
+        public Builder theatreId(UUID theatreId) {
+            this.theatreId = theatreId;
+            return this;
+        }
+
+        public Builder city(String city) {
+            this.city = city;
+            return this;
+        }
+
+        public Builder status(BookingStatus status) {
+            this.status = status;
+            return this;
+        }
+
+        public Booking build() {
+            return new Booking(userId, showId, theatreId, city, status);
+        }
+    }
 }
